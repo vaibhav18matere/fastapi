@@ -115,3 +115,14 @@ Steps:
 1. Defines a Pydantic Class - Pydantic Model that represents the idea schema of the data.
 2. Instantiate model with raw input data. (automatic validations check).
 3. Pass the validated model object to functions / codebase
+
+```
+    name: str = Field(min_length=2, max_length=50, example="Vaibhav")
+    age: int
+    married: bool = False    # default value is False if not provided
+    email: EmailStr
+    medications: List[str]
+    allergies: Optional[Dict[str, str]] = None
+    website: AnyUrl
+    weight: float = Field(gt=0, lt=100, description="Weight in kg", example=70.5)
+```
