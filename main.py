@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Path
+from fastapi import FastAPI, HTTPException, Path
 from pydantic import BaseModel # for data validation
 from typing import List # for data type
 import json
@@ -63,6 +63,6 @@ def view_patient(patient_id: str = Path(..., description = "The ID of the patien
     if patient_id in data:
         return data[patient_id]
     else:
-        return {"error": "Patient not found"}
+        return HTTPException(status_code=404, detail="Patient not found")
 
 # check the resource at http://127.0.0.1:8000/patient/P001
