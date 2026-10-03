@@ -1,8 +1,14 @@
 from fastapi import FastAPI # it is aframework
 from pydantic import BaseModel # for data validation
 from typing import List # for data type
+import json
 
 app = FastAPI()
+
+def load_data():
+    with open("patients.json", "r") as f:
+        data = json.load(f)
+    return data
 
 class Tea(BaseModel):
     id: int
@@ -41,3 +47,8 @@ def delete_tea(tea_id: int):
             deleted_tea = teas.pop(index)
             return deleted_tea
     return {"error": "Tea not found"}
+
+@app.get('/view')
+def view():
+    data = load_data()
+    return data
