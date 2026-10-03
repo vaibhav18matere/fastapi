@@ -4,7 +4,7 @@ from typing import List, Dict, Optional
 
 class Patient(BaseModel):
 
-    name: str
+    name: str = Field(min_length=2, max_length=50, description="Name of the patient", example="Vaibhav")
     age: int
     married: bool = False    # default value is False if not provided
     email: EmailStr
