@@ -89,14 +89,17 @@ Ans : 4 (thus, CRUD : 4 HTTP Methods)
 #### HTTPS Status Codes
 
 ```
-200
-301
-302
-304
-400
-401
-403
-404
-500
-502
+200 - Success (OK)
+201 - Resource Created
+204 - Success But no data return
+301 - Permanent Redirect
+302 - Remporary Redirect
+304 - Not Modified (used for caching)
+400 - Bad request
+401 - Unauthorized
+403 - Forbidden (Authenticated but no permission, Not Allowed)
+404 - Not Found (Resource doesn't exists)
+500 - Internal Server Error (Something broker on server)
+502 - Bad Gateway (Gateway like Ngnix failed to reach backend)
+503 - Service Unavailable (Server Down or Overload)
 ```
