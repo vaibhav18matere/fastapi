@@ -53,6 +53,8 @@ def view():
     data = load_data()
     return data
 
+# to find a particular patient, we can use the path parameter in the URL. The path parameter is defined in the route using curly braces {}. In this case, we are defining a path parameter called patient_id.
+
 @app.get('/patient/{patient_id}')
 def view_patient(patient_id: str = Path(..., description = "The ID of the patient in the DB", example = "P001", min_length = 4, max_length = 4)): 
     # load all patients data
