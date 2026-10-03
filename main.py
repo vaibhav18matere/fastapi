@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Path
+from fastapi import FastAPI, HTTPException, Path, Query
 from pydantic import BaseModel # for data validation
 from typing import List # for data type
 import json
@@ -66,3 +66,23 @@ def view_patient(patient_id: str = Path(..., description = "The ID of the patien
         return HTTPException(status_code=404, detail="Patient not found")
 
 # check the resource at http://127.0.0.1:8000/patient/P001
+
+# QWERY PARAMETERS - to sort the patients by height, weight or bmi. The query parameters are defined in the route using the Query class. In this case, we are defining two query parameters called sort_by and order.
+
+@app.get('/sort')
+def sort_patients(sort_by: str = Query(..., description = "The field to sort the patients by height, weight or bmi"), order: str = Query('asc', description = "The order to sort the patients by asc or desc")):
+    valid_fields = ['height', 'weight', 'bmi']
+    valid_orders = ['asc', 'desc']
+    if sort_by not in valid_fields:
+        raise HTTPException(status_code=400, detail=f"Invalid sort field. Valid fields are: {', '.join(valid_fields)}")
+    if order not in valid_orders:
+        raise HTTPException(status_code=400, detail="Invalid order. Valid options are: asc, desc")
+    data = load_data()
+
+    sort_order = True if order == 'desc' else False
+
+    sorted_data = sorted(data.values(), key=lambda x: x[sort_by], reverse=sort_order)
+    return sorted_data
+
+# check the resource at http://127.0.0.1:8000/sort?sort_by=height , http://127.0.0.1:8000/sort?sort_by=weight , http://127.0.0.1:8000/sort?sort_by=bmi
+# http://127.0.0.1:8000/sort?sort_by=bmi&order=desc , http://127.0.0.1:8000/sort?sort_by=height&order=desc

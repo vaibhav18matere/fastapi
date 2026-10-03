@@ -77,14 +77,18 @@ Ans : 4 (thus, CRUD : 4 HTTP Methods)
 ```
 
 #### Path Params
-
 ```
 - To read, delete or edit particular resource
 ```
 
-
 #### Query Params
-
+```
+- Optional key-value pairs 
+- Appended at the end of URL endpoint
+- Useed to pass additional data to the server in an HTTP request.
+- Typically used for operations like 1. Filtering, 2. Sorting 3. Searching 4. Pagination
+- Without altering the existing endpoint path.
+```
 
 #### HTTPS Status Codes
 
