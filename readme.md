@@ -84,3 +84,19 @@ Ans : 4 (thus, CRUD : 4 HTTP Methods)
 
 
 #### Query Params
+
+
+#### HTTPS Status Codes
+
+```
+200
+301
+302
+304
+400
+401
+403
+404
+500
+502
+```
