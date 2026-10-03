@@ -42,7 +42,7 @@ patient_info = {
     "allergies": {"penicillin": "moderate", "latex": "moderate"},
     "email": "abc@gmail.com",
     "website": "https://www.google.com",
-    "weight": "99"
+    "weight": 65
     # if we remove allergies, it will be None
     # check with website as www.googlecom
     # check with weight as -10
