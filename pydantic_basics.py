@@ -37,8 +37,9 @@ patient_info = {
     "medications": ["Aspirin", "Ibuprofen"],
     "allergies": {"penicillin": "moderate", "latex": "moderate"},
     "email": "abc@gmail.com",
-    "website": "https://www.google"
+    "website": "https://www.google.com"
     # if we remove allergies, it will be None
+    # check with www.googlecom
 }
 
 patient1 = Patient(**patient_info)
