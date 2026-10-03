@@ -107,3 +107,11 @@ Ans : 4 (thus, CRUD : 4 HTTP Methods)
 502 - Bad Gateway (Gateway like Ngnix failed to reach backend)
 503 - Service Unavailable (Server Down or Overload)
 ```
+
+### Pydantic
+- For data "type validation"
+
+Steps:
+1. Defines a Pydantic Class - Pydantic Model that represents the idea schema of the data.
+2. Instantiate model with raw input data. (automatic validations check).
+3. Pass the validated model object to functions / codebase
