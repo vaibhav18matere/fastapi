@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List, Dict
+from typing import List, Dict, Optional
 
 class Patient(BaseModel):
 
@@ -7,7 +7,7 @@ class Patient(BaseModel):
     age: int
     married: bool
     medications: List[str]
-    allergies: Dict[str, str]
+    allergies: Optional[Dict[str, str]] = None
 
 def insert_patient_data(patient: Patient):
     print(patient.name)
@@ -20,7 +20,7 @@ def insert_patient_data(patient: Patient):
 def update_patient_date(patient:Patient):
     patient.age = 90
     print(patient.age)
-    print(patient.married)
+    print(patient.married) = False # default value is False if not provided
     print(patient.medications)
     print(patient.allergies)
     print("updated patient data >>>>>>>>>>>>>>>>>>>>")
@@ -31,6 +31,7 @@ patient_info = {
     "married": True,
     "medications": ["Aspirin", "Ibuprofen"],
     "allergies": {"penicillin": "moderate", "latex": "moderate"}
+    # if we remove allergies, it will be None
 }
 
 patient1 = Patient(**patient_info)
