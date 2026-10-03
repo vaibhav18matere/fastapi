@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, AnyUrl
 from typing import List, Dict, Optional
 
 class Patient(BaseModel):
@@ -9,6 +9,7 @@ class Patient(BaseModel):
     email: EmailStr
     medications: List[str]
     allergies: Optional[Dict[str, str]] = None
+    website: AnyUrl
 
 def insert_patient_data(patient: Patient):
     print(patient.name)
@@ -17,6 +18,7 @@ def insert_patient_data(patient: Patient):
     print(patient.medications)
     print(patient.allergies)
     print(patient.email)
+    print(patient.website)
     print("inserted patient data >>>>>>>>>>>>>>>>>>>>")
 
 def update_patient_date(patient:Patient):
@@ -25,6 +27,7 @@ def update_patient_date(patient:Patient):
     print(patient.married)
     print(patient.medications)
     print(patient.allergies)
+    print(patient.website)
     print("updated patient data >>>>>>>>>>>>>>>>>>>>")
 
 patient_info = {
@@ -33,7 +36,8 @@ patient_info = {
     "married": True,
     "medications": ["Aspirin", "Ibuprofen"],
     "allergies": {"penicillin": "moderate", "latex": "moderate"},
-    "email": "abc@gmail.com"
+    "email": "abc@gmail.com",
+    "website": "https://www.google"
     # if we remove allergies, it will be None
 }
 
