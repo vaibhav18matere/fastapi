@@ -1,4 +1,5 @@
-from pydantic import BaseModel, EmailStr, AnyUrl
+from operator import gt
+from pydantic import BaseModel, EmailStr, AnyUrl, Field
 from typing import List, Dict, Optional
 
 class Patient(BaseModel):
@@ -10,6 +11,7 @@ class Patient(BaseModel):
     medications: List[str]
     allergies: Optional[Dict[str, str]] = None
     website: AnyUrl
+    weight: float = Field(gt=0, lt=100, description="Weight in kg", example=70.5)
 
 def insert_patient_data(patient: Patient):
     print(patient.name)
@@ -19,6 +21,7 @@ def insert_patient_data(patient: Patient):
     print(patient.allergies)
     print(patient.email)
     print(patient.website)
+    print(patient.weight)
     print("inserted patient data >>>>>>>>>>>>>>>>>>>>")
 
 def update_patient_date(patient:Patient):
@@ -28,6 +31,7 @@ def update_patient_date(patient:Patient):
     print(patient.medications)
     print(patient.allergies)
     print(patient.website)
+    print(patient.weight)
     print("updated patient data >>>>>>>>>>>>>>>>>>>>")
 
 patient_info = {
@@ -37,9 +41,11 @@ patient_info = {
     "medications": ["Aspirin", "Ibuprofen"],
     "allergies": {"penicillin": "moderate", "latex": "moderate"},
     "email": "abc@gmail.com",
-    "website": "https://www.google.com"
+    "website": "https://www.google.com",
+    "weight": 99
     # if we remove allergies, it will be None
     # check with www.googlecom
+    # check with -10
 }
 
 patient1 = Patient(**patient_info)
