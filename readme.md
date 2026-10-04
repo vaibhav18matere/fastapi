@@ -127,7 +127,17 @@ Steps:
     weight: float = Field(gt=0, lt=100, description="Weight in kg", example=70.5)
 ```
 
-#### Computed Field
+#### Computed Fields
 
 - User doesn't provide this value but this value is formed/created by using other fields values
 - For ex. we calculate BMI using given fields of height, weight.
+
+#### Nested Models
+
+```
+Benefitts :
+1. Better Organization of related data
+2. Reusability 
+3. Readability
+4. Validation
+```
