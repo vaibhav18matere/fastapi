@@ -68,9 +68,21 @@ teas:List[Tea] = [] # list of teas
 
 # "Decorators" - gives superpower to the function
 
+# For User
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to tea house"}
+    return {"message": "Welcome to Patient Management System"}
+
+# For AWS - diff cloud services
+
+MODAL_VERSION = "1.0.0"
+
+@app.get("/health")
+def health_check():
+    return {
+        "status": "ok",
+        "version": MODAL_VERSION
+    }
 
 @app.get("/teas")
 def get_teas():
