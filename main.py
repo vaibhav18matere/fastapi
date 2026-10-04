@@ -38,6 +38,16 @@ class Patient(BaseModel):
             return "Overweight"
         return "Obese"
 
+# UPDATE - we have to create new class because user can edit or all fields, we never know and i above modal "class Patient(BaseModel):"
+# all fields are mandatory. in edit those fields are optional to edit
+class PatientUpdate(BaseModel):
+    name: Annotated[Optional[str], Field(default=None)]
+    city: Annotated[Optional[str], Field(default=None)]
+    age: Annotated[Optional[int], Field(default=None, gt=0)]
+    gender: Annotated[Optional[Literal['male', 'female']], Field(default=None)]
+    height: Annotated[Optional[float], Field(default=None, gt=0)]
+    weight: Annotated[Optional[float], Field(default=None, gt=0)]
+# all default values are set as None
 
 # utility function
 def load_data():
@@ -140,3 +150,35 @@ def create_patient(patient:Patient):
     save_data(data)
     print("check create patient endpoint")
     return JSONResponse(status_code=201, content={"message":"Patient Created Succssfully!"})
+
+@app.put("/edit/{patient_id}")
+def update_patient(patient_id: str, patient_update: PatientUpdate):
+    data = load_data()
+
+    if(patient_id not in data):
+        raise HTTPException(status_code=404, detail="Patient Not Found!")
+
+    existing_patient_info = data[patient_id]
+    updated_patient_info = patient_update.model_dump(exclude_unset=True)
+    # exclude_unset=True because i only want those fields which client sent me to change.
+
+    existing_patient_info.update(updated_patient_info)  # updating values sent by client in {}
+    
+    # data[patient_id] = existing_patient_info
+    # we can directly do this but if user changes weight or height, BMI and verdict changes dynamically.
+    # so we need to handle that case as well.
+    # we will convert "existing_patient_info" => to "pydantic object" => so that new values of BMI and verdict will be calculated dynamically.
+    # then we will coonverted Pydantic object into dict and save the data.
+    existing_patient_info['id'] = patient_id
+    patient_pydantic_object = Patient(**existing_patient_info) #here in {} we do not have ID (check patient json) so we have added id in previous line
+
+    #pydantic object => dict
+    existing_patient_info = patient_pydantic_object.model_dump(exclude="id")
+
+    # add this dict to data
+    data[patient_id] = existing_patient_info 
+
+    # save new data
+    save_data(data)
+
+    return JSONResponse(status_code=200, content="User Updated!")
