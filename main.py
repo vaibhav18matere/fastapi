@@ -1,14 +1,53 @@
 from fastapi import FastAPI, HTTPException, Path, Query
-from pydantic import BaseModel # for data validation
-from typing import List # for data type
-import json
+from pydantic import BaseModel, Field, computed_field # for data validation
+from fastapi.responses import JSONResponse
+from typing import List, Annotated, Literal, Optional
+import json # for data type
 
 app = FastAPI()
 
+class Patient(BaseModel):
+    id: Annotated[str, Field(..., description='ID of the patient', examples=['P001'])]
+    name: Annotated[str, Field(..., description='Name of the patient')]
+    city: Annotated[str, Field(..., description='City where the patient is living')]
+    age: Annotated[int, Field(..., gt=0, lt=120, description='Age of the patient')]
+    gender: Annotated[Literal['male', 'female', 'others'], Field(..., description='Gender of the patient')]
+    height: Annotated[float, Field(..., gt=0, description='Height of the patient in mtrs')]
+    weight: Annotated[float, Field(..., gt=0, description='Weight of the patient in kgs')]
+
+# calculate BMI dynamically based on the height and weight given i/p fields
+
+    @computed_field
+    @property
+    def bmi(self) -> float:
+        bmi = round(self.weight / (self.height**2), 2)
+        return bmi
+
+# calculate verdict based on BMI calculated
+
+    @computed_field
+    @property
+    def verdict_calc(self) -> str:
+        bmi = self.bmi
+
+        if bmi < 18.5:
+            return "Underweight"
+        if bmi < 25:
+            return "Normal"
+        if bmi < 30:
+            return "Overweight"
+        return "Obese"
+
+
+# utility function
 def load_data():
     with open("patients.json", "r") as f:
         data = json.load(f)
     return data
+
+def save_data(data):
+     with open("patients.json", "w") as f:
+        json.dump(data, f)
 
 class Tea(BaseModel):
     id: int
@@ -56,7 +95,7 @@ def view():
 # to find a particular patient, we can use the path parameter in the URL. The path parameter is defined in the route using curly braces {}. In this case, we are defining a path parameter called patient_id.
 
 @app.get('/patient/{patient_id}')
-def view_patient(patient_id: str = Path(..., description = "The ID of the patient in the DB", example = "P001", min_length = 4, max_length = 4)): 
+def view_patient(patient_id: str = Path(..., description = "The ID of the patient in the DB", examples = "P001", min_length = 4, max_length = 4)): 
     # load all patients data
     data = load_data()
 
@@ -86,3 +125,18 @@ def sort_patients(sort_by: str = Query(..., description = "The field to sort the
 
 # check the resource at http://127.0.0.1:8000/sort?sort_by=height , http://127.0.0.1:8000/sort?sort_by=weight , http://127.0.0.1:8000/sort?sort_by=bmi
 # http://127.0.0.1:8000/sort?sort_by=bmi&order=desc , http://127.0.0.1:8000/sort?sort_by=height&order=desc
+
+
+@app.post("/create")
+def create_patient(patient:Patient):
+    data = load_data()     # load existing data
+    if patient.id in data:     # check if the existing patient exists
+        raise HTTPException(status_code=400, detail="Patient already exists!")
+    # if not then add new user in DB
+    # note : here data = load_data() is a python dictionary and patient:Patient is a pydantic object
+    # we have to add in existing data in pydanctic object so,
+    data[patient.id] = patient.model_dump(exclude="id")
+    # save into json file
+    save_data(data)
+    print("check create patient endpoint")
+    return JSONResponse(status_code=201, content={"message":"Patient Created Succssfully!"})
