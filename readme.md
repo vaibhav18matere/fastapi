@@ -141,3 +141,11 @@ Benefitts :
 3. Readability
 4. Validation
 ```
+
+<!--
+Source - https://stackoverflow.com/a/38274615
+Posted by user3638471, modified by community. See post 'Timeline' for change history
+Retrieved 2026-10-04, License - CC BY-SA 4.0
+-->
+
+![paths_created](paths_created.png)
